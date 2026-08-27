@@ -26,11 +26,11 @@ u d a y a   v i j a y   a n a n d .
   software that acts on your behalf
   — and can prove it kept your trust.
 
-┌─────────────────────────┬─────────────────────────┬──────────────────────────┐
-│ NOW                     │ BEFORE                  │ FOCUS                    │
-│ MS QUANTUM SCI & TECH   │ CYBERSECURITY           │ TRUST INFRASTRUCTURE     │
-│ COLUMBIA                │ PURDUE                  │ FOR AI AGENTS            │
-└─────────────────────────┴─────────────────────────┴──────────────────────────┘
+────────────────────────────────────────────────────────────────────────────────
+NOW                       BEFORE                    FOCUS
+MS QUANTUM SCI & TECH     CYBERSECURITY             TRUST INFRASTRUCTURE
+COLUMBIA                  PURDUE                    FOR AI AGENTS
+────────────────────────────────────────────────────────────────────────────────
 ```
 
 ```
@@ -152,10 +152,10 @@ b u i l d   q u i e t l y .
 
   ship anyway.
 
-┌─────────────────────────┬─────────────────────────┬──────────────────────────┐
-│ LINKEDIN                │ INSTAGRAM               │ EMAIL                    │
-│ /in/udsy                │ @udsyx                  │ udayatejas2004@gmail.com │
-└─────────────────────────┴─────────────────────────┴──────────────────────────┘
+────────────────────────────────────────────────────────────────────────────────
+LINKEDIN                  INSTAGRAM                 EMAIL
+/in/udsy                  @udsyx                    udayatejas2004@gmail.com
+────────────────────────────────────────────────────────────────────────────────
 ```
 
 <p align="right"><sub><samp><a href="https://www.linkedin.com/in/udsy/">LINKEDIN</a>&ensp;·&ensp;<a href="https://instagram.com/udsyx">INSTAGRAM</a>&ensp;·&ensp;<a href="mailto:udayatejas2004@gmail.com">EMAIL</a></samp></sub></p>

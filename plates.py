@@ -161,28 +161,32 @@ def head(cap_a, cap_b, meta):
 
 
 def stub(cells):
-    """§4.3 ticket-stub table. Label above value, cells divided by rules.
-    Used on the opening and closing plates only — on all of them it is
-    monotonous."""
-    n = len(cells)
-    inner = COLS - (n + 1)
-    w = inner // n
-    widths = [w] * n
-    widths[-1] += inner - w * n
+    """§4.3 ticket-stub table. Label above value, columns divided by a rule.
 
-    top = "┌" + "┬".join("─" * x for x in widths) + "┐"
-    bot = "└" + "┴".join("─" * x for x in widths) + "┘"
-    lines = [top]
-    depth = max(len(c) - 1 for c in cells)
-    for row in range(depth + 1):
+    The poster drew the dividers as hairlines on all four sides. Here they are
+    horizontal only: a fenced block sets its lines with leading, so a vertical
+    box rule arrives broken at every row while a horizontal one stays whole.
+    Alignment holds the columns instead — which is the more typographic answer
+    anyway. Used on the opening and closing plates only; on all of them it is
+    monotonous.
+    """
+    n = len(cells)
+    w = COLS // n
+    widths = [w] * n
+    widths[-1] += COLS - w * n
+
+    rule = "─" * COLS
+    lines = [rule]
+    depth = max(len(c) for c in cells)
+    for row in range(depth):
         parts = []
         for c, x in zip(cells, widths):
             text = c[row] if row < len(c) else ""
             if len(text) > x - 2:
                 raise SystemExit(f"stub cell {text!r} exceeds {x - 2} cols")
-            parts.append(" " + text.ljust(x - 1))
-        lines.append("│" + "│".join(parts) + "│")
-    lines.append(bot)
+            parts.append(text.ljust(x))
+        lines.append("".join(parts).rstrip())
+    lines.append(rule)
     return lines
 
 
