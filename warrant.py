@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Builds, signs and renders the warrant.
+Builds, signs and renders the sheet.
 
-A warrant is a signed statement that one party may act on another's behalf.
-That is the thing I build, so the profile is one: a self-issued credential,
-signed twice, that anyone can check without trusting me or GitHub.
+The profile is one sheet of the same document as udsy.in: a label gutter,
+hairlines, registration marks. It is also a signed document, self-issued,
+so anyone can check it has not changed without trusting me or GitHub.
 
 Two signatures because that is what the migration actually looks like. Ed25519
 is what everything verifies today. ML-DSA-44 (FIPS 204) is what survives a
@@ -37,53 +37,67 @@ b64 = lambda b: base64.b64encode(b).decode()
 unb64 = base64.b64decode
 
 
-# ----------------------------------------------------------------- the claims
+# ------------------------------------------------------------------ the sheet
 
 def claims():
-    """The signed payload. Order matters: it is serialised canonically, so any
-    reordering, any changed character, breaks both signatures."""
+    """The signed payload: everything on the sheet. It is serialised
+    canonically, so any reordering or changed character breaks both
+    signatures."""
     return {
-        "subject": "Udaya Vijay Anand",
+        "subject": "udaya vijay anand",
         "issuer": "self",
-        "issued": "2026-08-27",
-        "location": "New York, NY",
-        "reading": "MS Quantum Science and Technology, Columbia",
-        "capabilities": [
-            {
-                "scope": "agent.memory:write",
-                "name": "Erys",
-                "text": "An ambient macOS agent that watches your work, "
-                        "remembers what you committed to, and follows "
-                        "through on it.",
-                "url": "erys.app",
-            },
-            {
-                "scope": "agent.delegation:prove",
-                "name": "Warrant",
-                "text": "A delegation-proof layer for AI agents, built on "
-                        "post-quantum signatures. If an agent acts for you, "
-                        "there should be proof you allowed it.",
-                "url": "",
-            },
-            {
-                "scope": "graph.professional:read",
-                "name": "Know",
-                "text": "Professional network intelligence for B2B teams, "
-                        "co-founded with a friend.",
-                "url": "useknow.io",
-            },
+        "issued": datetime.date.today().isoformat(),
+        "site": "udsy.in",
+        "unit": [
+            ["role", "security engineer · agentic systems"],
+            ["base", "new york city"],
+            ["school", "columbia MS '27 · purdue BS '26"],
+            ["open source", "82 PRs merged · 5,359 contributions / yr"],
+            ["status", "open to summer '27 internships"],
         ],
-        "prior": [
-            ("USENIX Security", "first-author paper on adversarial attacks "
-                                "against LLM-powered security tooling"),
-            ("KPMG", "incident response"),
-            ("DBS Bank", "vulnerability assessment"),
-            ("Purdue", "cybersecurity and network engineering"),
+        "bio": [
+            "i build and break agentic systems: infra, pipelines, evals, "
+            "automated red teaming, and getting them to work in production. "
+            "purdue '26 → columbia MS, where i do research on browser-agent speed.",
+            "co-founded know · 4x hackathon winner · photography @ sora.",
         ],
-        "open_questions": [
-            "What does it mean to prove an agent was allowed to act?",
-            "Which of today's signatures will still mean anything in 2040?",
-            "How much can software do for you before it stops being yours?",
+        "selected": [
+            ["phantom", "autonomous black-box pentest platform", "shipped"],
+            ["quipuu", "post-quantum crypto scanner in rust", "active"],
+            ["indexone", "tamper-evident chain of authority for multi-agent actions", "archived"],
+            ["soc adversarial eval", "attacking LLM security monitors", "under review"],
+            ["erys", "ambient macOS agent", "shelved"],
+            ["dsource", "browser-based space-planning editor", "active"],
+        ],
+        "more": [
+            ["simulation-labs", "finalist @ H company computer-use hackathon", "'26"],
+            ["spotlight", "investor agent that cites a source span for every claim. hack nation", "'26"],
+            ["tablestakes", "where to eat right now, with receipts. claude impact lab hackathon", "'26"],
+            ["muse", "always-on voice agent for macOS", "'26"],
+            ["successor", "tacit-knowledge capture with a cite-or-refuse desk", "'26"],
+            ["resume-builder", "one-page LaTeX resumes, fit measured by compiling the PDF", "'26"],
+            ["fx3.io", "ai podcast generator with voice cloning. next.js + python, deployed on railway", "'26"],
+        ],
+        "work": [
+            ["'26–", "research assistant · columbia", "ai agents: browser-use latency + speed optimisation."],
+            ["'25–'26", "co-founder & CTO · know", "B2B network intelligence. a team's linkedin networks as one searchable graph: semantic search, warm-intro paths, multi-tenant RLS. with @satyam. closed may '26."],
+            ["'25", "campus strategist · perplexity", "drove Comet sign-ups via campaigns, demos, workshops."],
+            ["'25", "cyber defence & IR · KPMG india", "IR triage + malware analysis. SIEM detections mapped to MITRE ATT&CK (+30% coverage). AI safety guardrails middleware across 5 LLM providers, 25–40 TPS at sub-500ms P95."],
+            ["'24", "vulnerability assessment · DBS bank", "led Rapid7 InsightVM POC for RBI compliance (+25% detection speed). async crawler over 70k+ NCIIPC advisory pages at 99%+ completeness."],
+            ["'24–'25", "TA · purdue", "CNIT 176 + 271 (IT architecture, cybersecurity fundamentals). designed 22 hands-on labs on TCP/IP, linux admin, hardening for 75 students (+15% scores)."],
+            ["'23", "ML research · ASSISTments (WPI)", "auto-grader at 79% accuracy, supported $8M DoE grant."],
+            ["'20–'21", "project + supervising intern · unilever", "4M (man, machine, material, method) process optimization, AI workflow tracking, contractor ops."],
+        ],
+        "education": [
+            ["'26–'27", "columbia · MS quantum science & technology", "expected dec '27."],
+            ["'23–'26", "purdue · BS cybersecurity & network engineering", "finance minor · 3.6 GPA · security+, cysa+, csap, ceh"],
+            ["'22–'23", "WPI · BS computer science", "3.8 GPA · dean's list. transferred."],
+        ],
+        "contact": [
+            ["email", "udaya.vijayanand@gmail.com", "mailto:udaya.vijayanand@gmail.com"],
+            ["github", "github.com/udsy19", "https://github.com/udsy19"],
+            ["linkedin", "linkedin.com/in/udsy", "https://www.linkedin.com/in/udsy"],
+            ["sora", "thesora.io", "https://thesora.io"],
         ],
     }
 
@@ -120,141 +134,135 @@ def load_or_make_keys(rotate=False):
 
 # -------------------------------------------------------------- typography
 
-def rule(ch="─"):
-    return ch * COLS
+GUTTER = 14                       # label column, like the site's gutter
+BODY = COLS - GUTTER - 3          # content column after " │ "
+STATUS = {"shipped": "■", "active": "▣", "under review": "◫",
+          "shelved": "□", "archived": "□"}
 
 
-def band(title, right=""):
-    """Section rule with the title set into it."""
-    left = f"── {title} "
-    return (left + "─" * max(0, COLS - len(left) - len(right)) + right)[:COLS]
-
-
-def wrap(text, width, indent):
+def wrap(text, width):
     out, line = [], ""
     for word in text.split():
         if len(line) + len(word) + (1 if line else 0) > width:
-            out.append(" " * indent + line)
+            out.append(line)
             line = word
         else:
             line = (line + " " + word) if line else word
     if line:
-        out.append(" " * indent + line)
+        out.append(line)
     return out
 
 
-# ----------------------------------------------------------------- rendering
+class Sheet:
+    """Lines of a sheet: a label gutter on the left, a rule between bands,
+    and a registration mark where rule and gutter line cross."""
+
+    def __init__(self):
+        self.L = []
+
+    def rule(self, join="┼"):
+        self.L.append("─" * GUTTER + join + "─" * (COLS - GUTTER - 1))
+
+    def row(self, label, text=""):
+        self.L.append(f"{label:<{GUTTER}}│ {text}"[:COLS].rstrip())
+
+    def band(self, label, lines, count=None):
+        """A band: label (and count) in the gutter beside the first lines,
+        empty gutter beside the rest."""
+        tag = label if count is None else f"{label:<10}{count:02d}"
+        for i, text in enumerate(lines):
+            self.row(tag if i == 0 else "", text)
+
+    def blank(self):
+        self.row("")
+
 
 def render(payload, sig, transcript):
     c = payload
-    L = []
-    add = L.append
+    s = Sheet()
 
-    add(rule("═"))
-    head = "W A R R A N T"
-    tail = f"self-issued · {c['issued']}"
-    add(head + " " * (COLS - len(head) - len(tail)) + tail)
-    add(rule("═"))
-    add("")
-    add("A warrant is a signed statement that one party may act on another's")
-    add("behalf. That is the thing I build, so this page is one.")
-    add("")
-    add("Everything here is signed twice — Ed25519 for today, ML-DSA-44 for the")
-    add("decade after RSA stops being a good idea. Neither signature asks you to")
-    add("trust me, or GitHub. Clone this and run the verifier yourself.")
-    add("")
+    left = "udsy"
+    mid = "work · projects · open source"
+    right = c["site"]
+    gap = COLS - len(left) - len(mid) - len(right)
+    s.L.append(left + " " * (gap // 2) + mid + " " * (gap - gap // 2) + right)
+    s.rule("┬")
 
-    add(band("SUBJECT"))
-    add("")
-    add(f"  {c['subject'].lower()}")
-    add(f"  {c['location'].lower()} · {c['reading'].lower()}")
-    add("")
+    # unit
+    s.row("unit", c["subject"])
+    for k, v in c["unit"]:
+        s.row(k, v)
+    s.rule()
 
-    add(band("CAPABILITIES"))
-    add("")
-    for cap in c["capabilities"]:
-        head = f"  {cap['scope']:<26}{cap['name'].lower()}"
-        add(head)
-        for ln in wrap(cap["text"], COLS - 30, 28):
-            add(ln)
-        if cap["url"]:
-            add(" " * 28 + cap["url"])
-        add("")
+    # bio
+    lines = []
+    for i, para in enumerate(c["bio"]):
+        if i:
+            lines.append("")
+        lines += wrap(para, BODY)
+    s.band("bio", lines)
+    s.rule()
 
-    add(band("PRIOR"))
-    add("")
-    for org, what in c["prior"]:
-        lines = wrap(what, COLS - 28, 28)
-        add(f"  {org:<26}{lines[0].lstrip()}")
-        for ln in lines[1:]:
-            add(ln)
-    add("")
+    # selected: name and state on one line, the clause beneath
+    lines = []
+    for name, clause, state in c["selected"]:
+        mark = f"{STATUS[state]} {state}"
+        lines.append(f"{name:<{BODY - len(mark)}}{mark}")
+        lines += ["  " + l for l in wrap(clause, BODY - 2)]
+    s.band("selected", lines, len(c["selected"]))
+    s.rule()
 
-    add(band("WHAT THE SIGNATURE MEANS"))
-    add("")
-    add("  It proves this document has not changed since I signed it, and that")
-    add("  it was signed by the holder of the key below. That is all a signature")
-    add("  has ever proved. It does not attest that the section above is true —")
-    add("  for that you ask the institutions, not the maths.")
-    add("")
-    add("  Knowing exactly where that line falls is most of my work.")
-    add("")
+    lines = []
+    for name, clause, year in c["more"]:
+        lines.append(f"{name:<{BODY - len(year)}}{year}")
+        lines += ["  " + l for l in wrap(clause, BODY - 2)]
+    s.band("more", lines, len(c["more"]))
+    s.rule()
 
-    add(band("SIGNATURE"))
-    add("")
-    add(f"  payload      warrant.json          sha-256  {sig['payload_sha256'][:24]}")
-    add(f"  ed25519      public key                     {sig['ed25519_pk'][:24]}")
-    add(f"               signature                      {sig['ed25519_sig'][:24]}")
-    add(f"  ml-dsa-44    public key   sha-256           {hashlib.sha256(unb64(sig['mldsa_pk'])).hexdigest()[:24]}")
-    add(f"               signature    sha-256           {hashlib.sha256(unb64(sig['mldsa_sig'])).hexdigest()[:24]}")
-    add("")
-    add("  Full keys and signatures are in warrant.sig.json. The ML-DSA public")
-    add("  key is 1312 bytes and its signature 2420, against 32 and 64 for")
-    add("  Ed25519. That size difference is the price of the next thirty years.")
-    add("")
-    add("  pip install cryptography dilithium-py")
-    add("")
-    for ln in transcript:
-        add("  " + ln)
-    add("")
+    for label, key in (("work", "work"), ("education", "education")):
+        lines = []
+        for i, (year, title, detail) in enumerate(c[key]):
+            if i:
+                lines.append("")
+            lines.append(f"{year:<9}{title}")
+            lines += [" " * 9 + l for l in wrap(detail, BODY - 9)]
+        s.band(label, lines, len(c[key]))
+        s.rule()
 
-    add(band("NOT UNDER WARRANT"))
-    add("")
-    add("  Some things do not need proving.")
-    add("")
-    add("  I photograph people. Sony A7III, mostly the 85mm. The practice is")
-    add("  called Sora.                                             thesora.io")
-    add("")
-    add("  I was a competitive inline speed skater in India and I am slowly")
-    add("  finding my way back to it in New York.")
-    add("")
-    add("  I keep returning to the Mahabharata, especially the Tamil retellings.")
-    add("")
+    s.band("contact", [f"{k:<10}{v}" for k, v, _ in c["contact"]])
+    s.rule()
 
-    add(band("OPEN"))
-    add("")
-    for q in c["open_questions"]:
-        add(f"  — {q}")
-    add("")
-    add(rule("═"))
+    # signature: what it proves, and how to check it
+    lines = wrap(
+        "this sheet is signed twice: ed25519 for today, ml-dsa-44 (FIPS 204) "
+        "for the decade after RSA stops being a good idea. the signature proves "
+        "the sheet has not changed since it was signed, and nothing more.", BODY) + [
+        "",
+        f"payload    warrant.json   sha-256   {sig['payload_sha256'][:24]}",
+        f"ed25519    public key               {sig['ed25519_pk'][:24]}",
+        f"           signature                {sig['ed25519_sig'][:24]}",
+        f"ml-dsa-44  public key     sha-256   {hashlib.sha256(unb64(sig['mldsa_pk'])).hexdigest()[:24]}",
+        f"           signature      sha-256   {hashlib.sha256(unb64(sig['mldsa_sig'])).hexdigest()[:24]}",
+        "",
+        "pip install cryptography dilithium-py",
+    ] + transcript
+    s.band("signature", lines)
+    s.rule("┴")
+    s.L.append(f"sheet 01 / 01 · issued {c['issued']} · {c['site']}")
 
-    over = [(i, len(l)) for i, l in enumerate(L) if len(l) > COLS]
-    if over:
-        raise SystemExit(f"lines over {COLS} cols: {over}")
-
-    body = "\n".join(L)
-    links = ('<p align="right"><sub><samp>'
-             '<a href="https://erys.app">ERYS.APP</a>&ensp;·&ensp;'
-             '<a href="https://useknow.io">USEKNOW.IO</a>&ensp;·&ensp;'
-             '<a href="https://thesora.io">THESORA.IO</a>&ensp;·&ensp;'
-             '<a href="https://www.linkedin.com/in/udsy/">LINKEDIN</a>&ensp;·&ensp;'
-             '<a href="https://instagram.com/udsyx">INSTAGRAM</a>&ensp;·&ensp;'
-             '<a href="mailto:udayatejas2004@gmail.com">EMAIL</a>'
-             '</samp></sub></p>')
+    body = "\n".join(s.L)
+    header = (
+        '<picture>\n'
+        '  <source media="(prefers-color-scheme: dark)" srcset="assets/sheet-dark.png">\n'
+        '  <img alt="udaya vijay anand — security engineer, agentic systems" src="assets/sheet-light.png" width="100%">\n'
+        '</picture>\n\n')
+    links = ("<p align=\"right\"><sub><samp>" + "&ensp;·&ensp;".join(
+        f'<a href="{href}">{k}</a>' for k, _, href in c["contact"]) +
+        f'&ensp;·&ensp;<a href="https://{c["site"]}">{c["site"]}</a></samp></sub></p>')
     return ("<!-- This README is a signed document. Do not edit it by hand:\n"
             "     the signatures are over warrant.json, and hand edits here\n"
             "     will simply be overwritten. Run: python3 warrant.py -->\n\n"
-            "```\n" + body + "\n```\n\n" + links + "\n")
+            + header + "```\n" + body + "\n```\n\n" + links + "\n")
 
 
 # ---------------------------------------------------------------------- main
