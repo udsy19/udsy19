@@ -2,10 +2,7 @@
      the signatures are over warrant.json, and hand edits here
      will simply be overwritten. Run: python3 warrant.py -->
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/sheet-dark.png">
-  <img alt="udaya vijay anand — security engineer, agentic systems" src="assets/sheet-light.png" width="100%">
-</picture>
+
 
 ```
 udsy                    work · projects · open source                    udsy.in
