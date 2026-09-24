@@ -2,9 +2,10 @@
 """
 Builds, signs and renders the sheet.
 
-The profile is one sheet of the same document as udsy.in: a label gutter,
-hairlines, registration marks. It is also a signed document, self-issued,
-so anyone can check it has not changed without trusting me or GitHub.
+The profile is the same paper as udsy.in, drawn in plain text: a centred
+title block, a contents list with leaders, an abstract between rules, then
+sections with counts. It is also a signed document, self-issued, so anyone
+can check it has not changed without trusting me or GitHub.
 
 Two signatures because that is what the migration actually looks like. Ed25519
 is what everything verifies today. ML-DSA-44 (FIPS 204) is what survives a
@@ -52,8 +53,14 @@ def claims():
             ["role", "security engineer · agentic systems"],
             ["base", "new york city"],
             ["school", "columbia MS '27 · purdue BS '26"],
-            ["open source", "82 PRs merged · 5,359 contributions / yr"],
+            ["open source", "92 PRs merged · 5,654 contributions / yr"],
             ["status", "open to summer '27 internships"],
+        ],
+        "contents": [
+            ["work", "8 roles · 3 schools"],
+            ["projects", "15 entries"],
+            ["open source", "live on udsy.in/oss"],
+            ["blog", "2 field notes"],
         ],
         "bio": [
             "i build and break agentic systems: infra, pipelines, evals, "
@@ -134,8 +141,7 @@ def load_or_make_keys(rotate=False):
 
 # -------------------------------------------------------------- typography
 
-GUTTER = 14                       # label column, like the site's gutter
-BODY = COLS - GUTTER - 3          # content column after " │ "
+BODY = 64                         # the reading measure, centred in 80 columns
 STATUS = {"shipped": "■", "active": "▣", "under review": "◫",
           "shelved": "□", "archived": "□"}
 
@@ -153,91 +159,112 @@ def wrap(text, width):
     return out
 
 
-class Sheet:
-    """Lines of a sheet: a label gutter on the left, a rule between bands,
-    and a registration mark where rule and gutter line cross."""
+class Paper:
+    """Lines of the paper: everything is centred in 80 columns, sections
+    have a heading with a count, and a rule is a run of ─ across the
+    reading measure."""
 
     def __init__(self):
         self.L = []
 
-    def rule(self, join="┼"):
-        self.L.append("─" * GUTTER + join + "─" * (COLS - GUTTER - 1))
+    def pad(self, text=""):
+        left = (COLS - BODY) // 2
+        self.L.append((" " * left + text).rstrip())
 
-    def row(self, label, text=""):
-        self.L.append(f"{label:<{GUTTER}}│ {text}"[:COLS].rstrip())
+    def centre(self, text):
+        self.L.append(text.center(COLS).rstrip())
 
-    def band(self, label, lines, count=None):
-        """A band: label (and count) in the gutter beside the first lines,
-        empty gutter beside the rest."""
-        tag = label if count is None else f"{label:<10}{count:02d}"
-        for i, text in enumerate(lines):
-            self.row(tag if i == 0 else "", text)
+    def rule(self):
+        self.pad("─" * BODY)
 
     def blank(self):
-        self.row("")
+        self.L.append("")
+
+    def lead(self, text):
+        self.pad(text.upper())
+
+    def heading(self, title, count=None):
+        self.blank()
+        self.pad(title if count is None else f"{title}  {count:02d}")
+        self.blank()
+
+    def body(self, lines):
+        for l in lines:
+            self.pad(l)
+
+    def spread(self, left, right):
+        """left text, right text, the space between filled."""
+        gap = BODY - len(left) - len(right)
+        self.pad(left + " " * max(1, gap) + right)
 
 
 def render(payload, sig, transcript):
     c = payload
-    s = Sheet()
+    s = Paper()
+    unit = dict(c["unit"])
 
-    left = "udsy"
-    mid = "work · projects · open source"
-    right = c["site"]
-    gap = COLS - len(left) - len(mid) - len(right)
-    s.L.append(left + " " * (gap // 2) + mid + " " * (gap - gap // 2) + right)
-    s.rule("┬")
+    # topline, title block
+    s.spread(f"udsy · rev {c['issued']}", unit["base"].upper())
+    s.blank()
+    s.centre(c["subject"])
+    s.centre(unit["role"])
+    s.centre(unit["school"].upper())
+    s.centre(unit["status"].upper())
+    s.blank()
 
-    # unit
-    s.row("unit", c["subject"])
-    for k, v in c["unit"]:
-        s.row(k, v)
+    # contents, with leaders
+    s.lead("contents")
+    for i, (title, note) in enumerate(c["contents"], 1):
+        head = f"{i}  {title} "
+        s.pad(head + "·" * (BODY - len(head) - len(note) - 1) + " " + note)
+    s.blank()
+
+    # abstract: the bio
     s.rule()
-
-    # bio
-    lines = []
+    s.lead("bio")
     for i, para in enumerate(c["bio"]):
         if i:
-            lines.append("")
-        lines += wrap(para, BODY)
-    s.band("bio", lines)
+            s.blank()
+        s.body(wrap(para, BODY))
+    s.blank()
+    s.pad(f"open source · {unit['open source']}")
     s.rule()
 
     # selected: name and state on one line, the clause beneath
-    lines = []
+    s.heading("selected", len(c["selected"]))
     for name, clause, state in c["selected"]:
-        mark = f"{STATUS[state]} {state}"
-        lines.append(f"{name:<{BODY - len(mark)}}{mark}")
-        lines += ["  " + l for l in wrap(clause, BODY - 2)]
-    s.band("selected", lines, len(c["selected"]))
-    s.rule()
+        s.spread(name, f"{STATUS[state]} {state}")
+        s.body(["  " + l for l in wrap(clause, BODY - 2)])
 
-    lines = []
+    s.heading("more", len(c["more"]))
     for name, clause, year in c["more"]:
-        lines.append(f"{name:<{BODY - len(year)}}{year}")
-        lines += ["  " + l for l in wrap(clause, BODY - 2)]
-    s.band("more", lines, len(c["more"]))
-    s.rule()
+        s.spread(name, year)
+        s.body(["  " + l for l in wrap(clause, BODY - 2)])
 
     for label, key in (("work", "work"), ("education", "education")):
-        lines = []
+        s.heading(label, len(c[key]))
         for i, (year, title, detail) in enumerate(c[key]):
             if i:
-                lines.append("")
-            lines.append(f"{year:<9}{title}")
-            lines += [" " * 9 + l for l in wrap(detail, BODY - 9)]
-        s.band(label, lines, len(c[key]))
-        s.rule()
+                s.blank()
+            s.spread(title, year)
+            s.body(["  " + l for l in wrap(detail, BODY - 2)])
 
-    s.band("contact", [f"{k:<10}{v}" for k, v, _ in c["contact"]])
+    # foot
+    s.blank()
     s.rule()
+    vals = [v for _, v, _ in c["contact"]]
+    s.pad("   ".join(vals[:2]))
+    s.pad("   ".join(vals[2:]))
+    s.pad(f"© {c['issued'][:4]} {c['subject']}")
 
     # signature: what it proves, and how to check it
-    lines = wrap(
-        "this sheet is signed twice: ed25519 for today, ml-dsa-44 (FIPS 204) "
+    s.heading("signature")
+    s.body(wrap(
+        "this paper is signed twice: ed25519 for today, ml-dsa-44 (FIPS 204) "
         "for the decade after RSA stops being a good idea. the signature proves "
-        "the sheet has not changed since it was signed, and nothing more.", BODY) + [
-        "",
+        "the paper has not changed since it was signed, and nothing more.", BODY))
+    s.blank()
+    s.body([
         f"payload    warrant.json   sha-256   {sig['payload_sha256'][:24]}",
         f"ed25519    public key               {sig['ed25519_pk'][:24]}",
         f"           signature                {sig['ed25519_sig'][:24]}",
@@ -245,10 +272,9 @@ def render(payload, sig, transcript):
         f"           signature      sha-256   {hashlib.sha256(unb64(sig['mldsa_sig'])).hexdigest()[:24]}",
         "",
         "pip install cryptography dilithium-py",
-    ] + transcript
-    s.band("signature", lines)
-    s.rule("┴")
-    s.L.append(f"sheet 01 / 01 · issued {c['issued']} · {c['site']}")
+    ] + transcript)
+    s.blank()
+    s.rule()
 
     body = "\n".join(s.L)
     header = (
