@@ -277,18 +277,14 @@ def render(payload, sig, transcript):
     s.rule()
 
     body = "\n".join(s.L)
-    header = (
-        '<picture>\n'
-        '  <source media="(prefers-color-scheme: dark)" srcset="assets/sheet-dark.png">\n'
-        '  <img alt="udaya vijay anand — security engineer, agentic systems" src="assets/sheet-light.png" width="100%">\n'
-        '</picture>\n\n')
+    # no header image: the owner removed it, the sheet is the text
     links = ("<p align=\"right\"><sub><samp>" + "&ensp;·&ensp;".join(
         f'<a href="{href}">{k}</a>' for k, _, href in c["contact"]) +
         f'&ensp;·&ensp;<a href="https://{c["site"]}">{c["site"]}</a></samp></sub></p>')
     return ("<!-- This README is a signed document. Do not edit it by hand:\n"
             "     the signatures are over warrant.json, and hand edits here\n"
             "     will simply be overwritten. Run: python3 warrant.py -->\n\n"
-            + header + "```\n" + body + "\n```\n\n" + links + "\n")
+            + "```\n" + body + "\n```\n\n" + links + "\n")
 
 
 # ---------------------------------------------------------------------- main

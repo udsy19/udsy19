@@ -2,10 +2,8 @@
      the signatures are over warrant.json, and hand edits here
      will simply be overwritten. Run: python3 warrant.py -->
 
-
-
 ```
-        udsy · rev 2026-09-24                              NEW YORK CITY
+        udsy · rev 2026-09-25                              NEW YORK CITY
 
                                udaya vijay anand
                       security engineer · agentic systems
@@ -123,15 +121,15 @@
         signature proves the paper has not changed since it was signed,
         and nothing more.
 
-        payload    warrant.json   sha-256   c3bcc675813d970b85b1f398
+        payload    warrant.json   sha-256   ba908a6dc62d464fb1ff6cb6
         ed25519    public key               Vy8LBqQBTufegHO8SO3rh7/G
-                   signature                dydY2B8/PUOWsVx8+TgUu4fQ
+                   signature                t77Aesf3Qe08K76gEPAnP0vr
         ml-dsa-44  public key     sha-256   919dcd5151c1e39b462eb835
-                   signature      sha-256   5d670345ecbdbd0c093aa2d5
+                   signature      sha-256   6d3316b7c104804d303de416
 
         pip install cryptography dilithium-py
         $ python3 verify.py
-        [ ok ] sha-256     c3bcc675813d970b85b1f398
+        [ ok ] sha-256     ba908a6dc62d464fb1ff6cb6
         [ ok ] ed25519     signature valid
         [ ok ] ml-dsa-44   signature valid   FIPS 204
         warrant intact.
