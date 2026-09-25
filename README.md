@@ -3,7 +3,7 @@
      will simply be overwritten. Run: python3 warrant.py -->
 
 ```
-        udsy · rev 2026-09-25                              NEW YORK CITY
+        udsy                                               NEW YORK CITY
 
                                udaya vijay anand
                       security engineer · agentic systems
@@ -125,7 +125,9 @@
         ed25519    public key               Vy8LBqQBTufegHO8SO3rh7/G
                    signature                t77Aesf3Qe08K76gEPAnP0vr
         ml-dsa-44  public key     sha-256   919dcd5151c1e39b462eb835
-                   signature      sha-256   6d3316b7c104804d303de416
+                   signature      sha-256   434697ced6cdc8b1e4e882c6
+
+        issued     2026-09-25
 
         pip install cryptography dilithium-py
         $ python3 verify.py

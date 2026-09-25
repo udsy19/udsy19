@@ -204,7 +204,7 @@ def render(payload, sig, transcript):
     unit = dict(c["unit"])
 
     # topline, title block
-    s.spread(f"udsy · rev {c['issued']}", unit["base"].upper())
+    s.spread("udsy", unit["base"].upper())
     s.blank()
     s.centre(c["subject"])
     s.centre(unit["role"])
@@ -270,6 +270,8 @@ def render(payload, sig, transcript):
         f"           signature                {sig['ed25519_sig'][:24]}",
         f"ml-dsa-44  public key     sha-256   {hashlib.sha256(unb64(sig['mldsa_pk'])).hexdigest()[:24]}",
         f"           signature      sha-256   {hashlib.sha256(unb64(sig['mldsa_sig'])).hexdigest()[:24]}",
+        "",
+        f"issued     {c['issued']}",
         "",
         "pip install cryptography dilithium-py",
     ] + transcript)
