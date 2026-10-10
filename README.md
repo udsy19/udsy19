@@ -139,4 +139,4 @@
         ────────────────────────────────────────────────────────────────
 ```
 
-<p align="right"><sub><samp><a href="mailto:udaya.vijayanand@gmail.com">email</a>&ensp;·&ensp;<a href="https://github.com/udsy19">github</a>&ensp;·&ensp;<a href="https://www.linkedin.com/in/udsy">linkedin</a>&ensp;·&ensp;<a href="https://thesora.io">sora</a>&ensp;·&ensp;<a href="https://udsy.in">udsy.in</a></samp></sub></p>
+<p align="right"><sub><samp><a href="mailto:udaya.vijayanand@gmail.com">email</a>&ensp;·&ensp;<a href="https://github.com/udsy19">github</a>&ensp;·&ensp;<a href="https://www.linkedin.com/in/udsy">linkedin</a>&ensp;·&ensp;<a href="https://thesora.io">sora</a>&ensp;·&ensp;<a href="https://udsy.in">udsy.in</a></samp></sub></p><p align="right"><img src="https://komarev.com/ghpvc/?username=udsy19&label=views&color=lightgrey&style=flat-square" alt="profile views"></p>
