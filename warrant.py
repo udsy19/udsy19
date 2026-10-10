@@ -283,6 +283,7 @@ def render(payload, sig, transcript):
     links = ("<p align=\"right\"><sub><samp>" + "&ensp;·&ensp;".join(
         f'<a href="{href}">{k}</a>' for k, _, href in c["contact"]) +
         f'&ensp;·&ensp;<a href="https://{c["site"]}">{c["site"]}</a></samp></sub></p>')
+    links += '<p align="right"><img src="https://komarev.com/ghpvc/?username=udsy19&label=views&color=lightgrey&style=flat-square" alt="profile views"></p>'
     return ("<!-- This README is a signed document. Do not edit it by hand:\n"
             "     the signatures are over warrant.json, and hand edits here\n"
             "     will simply be overwritten. Run: python3 warrant.py -->\n\n"
